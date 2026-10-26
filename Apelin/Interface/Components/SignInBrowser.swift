@@ -38,6 +38,21 @@ final class SignInBrowser: NSObject {
         }
     }
 
+    /// Opens a page in Reynard when installed, then falls back to the
+    /// system sign-in browser if the app is not available.
+    func openInReynard(_ page: URL) {
+        var components = URLComponents(string: "reynard://open")
+        components?.queryItems = [URLQueryItem(name: "url", value: page.absoluteString)]
+        guard let url = components?.url else {
+            open(page)
+            return
+        }
+        UIApplication.shared.open(url) { [weak self] opened in
+            guard !opened else { return }
+            DispatchQueue.main.async { self?.open(page) }
+        }
+    }
+
     /// Let go first, then cancel: the session's own completion then knows
     /// it was closed from here.
     func close() {

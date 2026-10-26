@@ -225,7 +225,7 @@ final class GitHubLoginController: UIViewController {
     private func open(_ code: GitHubDeviceFlow.Code) {
         UIPasteboard.general.string = code.userCode
         SPIndicator.present(title: String(localized: "Code Copied"), preset: .done, haptic: .success)
-        browser.open(code.verificationURL)
+        browser.openInReynard(code.verificationURL)
     }
 
     // MARK: - Drawing
